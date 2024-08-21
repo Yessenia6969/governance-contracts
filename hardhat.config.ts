@@ -16,6 +16,7 @@ import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
 import 'solidity-coverage';
 import 'hardhat-abi-exporter';
+import '@nomicfoundation/hardhat-verify';
 
 dotenv.config();
 
@@ -24,8 +25,13 @@ const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
 
 // Testnet and mainnet configuration.
 const ALCHEMY_KEY = process.env.ALCHEMY_KEY || '';
-const MNEMONIC = process.env.MNEMONIC || '';
 const MNEMONIC_PATH = "m/44'/60'/0'/0";
+let MNEMONIC = process.env.MNEMONIC || '';
+if (MNEMONIC === '') {
+  MNEMONIC = 'test test test test test test test test test test test test';
+  console.log('Note on-chain TXs cannot be created since a test mnemonic is being used that has no funds.');
+  console.log('If this was not intentional, re-run the script with a valid seed phrase stored in the MNEMONIC environment variable.');
+}
 
 // Load hardhat tasks.
 if (!SKIP_LOAD) {
@@ -48,7 +54,7 @@ function getRemoteNetworkConfig(
   networkId: number,
 ): HttpNetworkUserConfig {
   return {
-    url: `https://eth-${networkName}.alchemyapi.io/v2/${ALCHEMY_KEY}`,
+    url: `https://eth-${networkName}.g.alchemy.com/v2/${ALCHEMY_KEY}`,
     chainId: networkId,
     accounts: {
       mnemonic: MNEMONIC,
@@ -102,6 +108,7 @@ const hardhatConfig: HardhatUserConfig = {
     timeout: 0,
   },
   networks: {
+    sepolia: getRemoteNetworkConfig(NetworkName.sepolia, 11155111),
     kovan: getRemoteNetworkConfig(NetworkName.kovan, 42),
     ropsten: getRemoteNetworkConfig(NetworkName.ropsten, 3),
     mainnet: getRemoteNetworkConfig(NetworkName.mainnet, 1),
@@ -109,6 +116,13 @@ const hardhatConfig: HardhatUserConfig = {
   },
   abiExporter: {
     clear: true,
+  },
+  etherscan: {
+    apiKey: {
+      // Uncomment these and set the environment variable if you want to verify contracts on Etherscan.
+      // mainnet: process.env.MAINNET_ETHERSCAN_API_KEY!,
+      // sepolia: process.env.SEPOLIA_ETHERSCAN_API_KEY!,
+    },
   },
 };
 

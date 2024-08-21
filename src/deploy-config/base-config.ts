@@ -75,6 +75,17 @@ const MERKLE_PAUSER_TIMELOCK_CONFIG: TimelockConfig = {
   MINIMUM_QUORUM: 100,
 };
 
+const STARKWARE_TIMELOCK_CONFIG: TimelockConfig = {
+  DELAY: ONE_DAY_SECONDS * 10,
+  GRACE_PERIOD: ONE_DAY_SECONDS * 7,
+  MINIMUM_DELAY: ONE_DAY_SECONDS * 4,
+  MAXIMUM_DELAY: ONE_DAY_SECONDS * 21,
+  PROPOSITION_THRESHOLD: 50,
+  VOTING_DURATION_BLOCKS: ONE_DAY_BLOCKS * 4,
+  VOTE_DIFFERENTIAL: 50,
+  MINIMUM_QUORUM: 200,
+};
+
 const MERKLE_DISTRIBUTOR_CONFIG: MerkleDistributorConfig = {
   IPNS_NAME: 'rewards-data.dydx.foundation',
   IPFS_UPDATE_PERIOD: 60 * 3,  // 3 minutes
@@ -135,6 +146,7 @@ const config = {
   LONG_TIMELOCK_CONFIG,
   SHORT_TIMELOCK_CONFIG,
   MERKLE_PAUSER_TIMELOCK_CONFIG,
+  STARKWARE_TIMELOCK_CONFIG,
 
   // Merkle Distributor.
   MERKLE_DISTRIBUTOR_CONFIG,
@@ -265,6 +277,38 @@ const config = {
   DOT_MULTISIG_ADDRESS: '0xa8541f948411b3F95d9e89e8D339a56A9ed3D00b',
   //
   DOT_FUNDING_AMOUNT: '225000000000000000000000',
+
+  // Update Merkle Distributor Rewards Parameters v2. (DIP 20)
+  // This is to reduce trading rewards by 45%. LP rewards are unaffected.
+  // Alpha parameter remains unchanged since the last update and is equal to 0.
+  UPDATE_MERKLE_DISTRIBUTOR_LP_REWARDS_AMOUNT_v2: '1150685000000000000000000',
+  // Trading rewards are being reduced by 45% from `2,876,712` tokens to `1,582,192` per epoch.
+  UPDATE_MERKLE_DISTRIBUTOR_TRADER_REWARDS_AMOUNT_v2: '1582192000000000000000000',
+  UPDATE_MERKLE_DISTRIBUTOR_ALPHA_PARAMETER_v2: '0',
+
+  // Update Starkware Proposal
+  STARK_PERPETUAL_CONFIG_HASH: '0x03cbd17769430aed60aa8b9a5867b375c3fdca23e56cbbd83e33290577f50449',
+  IMPLEMENTATION_ADDRESS: '0x2C0df87E073755139101b35c0A51e065291cc2d3',
+  BYTES_IMPLEMENTATION: '0x0000000000000000000000005d8cc5659db74eebf19aa2bb39973f9339012ac50000000000000000000000003fed7bf5bf3e738bc30fbe61b048fdcb82368545000000000000000000000000df9c117cad37f2ed8c99e36a40317d8cc340d4a0000000000000000000000000c43f5526124877f9125e3b48101dca6d7c6b4ea3000000000000000000000000ccfeb952c6d0ac4ac6f29110c29bcbe7d3e0bb4f000000000000000000000000f23754231bc4ce8c8e92c3badfb37d922d46053c9e4f28fe4560da90869c18f8731d565775989cf96cfabfd6a534aee5c87c2135',
+
+  // Ops Trust ("DOT") Funding Amount (DIP 23)
+  // Amount to be transferred is $6,600,000 of DYDX
+  // Per the DIP price has been calculated using 24h VWAP from market data
+  // Price derived is $1.53 using Binance.com DYDX/USDT on
+  // Using market price of $1.53, rounded amount to be transferred is 4,314,000 DYDX
+  DOT_FUNDING_AMOUNT_v2: '4314000000000000000000000',
+
+  // Update Merkle Distributor LP Rewards (DIP 24)
+  // Proposal to reduce the current LP rewards by 50%. Trading rewards will not be changed.
+  // Alpha parameter will remain unchanged.
+  // LP rewards being reduced by 50% from '1,150,685' to '575,343' per epoch.
+  UPDATE_MERKLE_DISTRIBUTOR_LP_REWARDS_AMOUNT_DIP24: '575343000000000000000000',
+  // Trading rewards and alpha are unchanged.
+  UPDATE_MERKLE_DISTRIBUTOR_TRADER_REWARDS_AMOUNT_DIP24: '1582192000000000000000000',
+  UPDATE_MERKLE_DISTRIBUTOR_ALPHA_PARAMETER_DIP24: '0',
+  
+  // Treasury Bridge Proposal
+  UNALLOCATED_REWARDS_TO_BRIDGE_AMOUNT: toWad('240519495.4607200971'),
 };
 
 export type BaseConfig = typeof config;

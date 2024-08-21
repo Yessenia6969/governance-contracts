@@ -11,6 +11,9 @@ import {
   Treasury__factory,
   TreasuryVester__factory,
   IStarkPerpetual__factory,
+  WrappedEthereumDydxToken__factory,
+  GovernanceStrategyV2__factory,
+  TreasuryBridge__factory,
 } from '../../../types';
 import { IERC20__factory } from '../../../types/factories/IERC20__factory';
 import { LiquidityStakingV1__factory } from '../../../types/factories/LiquidityStakingV1__factory';
@@ -22,6 +25,7 @@ import { getDeployerSigner } from '../../deploy-config/get-deployer-address';
 import mainnetAddresses from '../../deployed-addresses/mainnet.json';
 import { getNetworkName } from '../../hre';
 import { MainnetDeployedContracts } from '../../types';
+import { deployUpgradeGovernanceStrategyV2Contracts } from '../deploy-upgrade-governance-strategy-v2-contracts';
 
 type DeployedAddresses = typeof mainnetAddresses;
 
@@ -44,6 +48,7 @@ export async function getMainnetDeployedContracts(): Promise<MainnetDeployedCont
     shortTimelock: new Executor__factory(deployer).attach(deployedAddresses.shortTimelock),
     longTimelock: new Executor__factory(deployer).attach(deployedAddresses.longTimelock),
     merklePauserTimelock: new Executor__factory(deployer).attach(deployedAddresses.merklePauserTimelock),
+    starkwarePriorityTimelock: new Executor__factory(deployer).attach(deployedAddresses.starkwarePriorityTimelock),
     rewardsTreasury: new Treasury__factory(deployer).attach(deployedAddresses.rewardsTreasury),
     rewardsTreasuryProxyAdmin: new ProxyAdmin__factory(deployer).attach(deployedAddresses.rewardsTreasuryProxyAdmin),
     safetyModule: new SafetyModuleV1__factory(deployer).attach(deployedAddresses.safetyModule),
@@ -66,5 +71,9 @@ export async function getMainnetDeployedContracts(): Promise<MainnetDeployedCont
     dydxCollateralToken: IERC20__factory.connect(deployedAddresses.dydxCollateralToken, deployer),
     starkPerpetual: IStarkPerpetual__factory.connect(deployedAddresses.starkPerpetual, deployer),
     starkProxyNewImpl: new StarkProxyV2__factory(deployer).attach(deployedAddresses.starkProxyNewImpl),
+    wrappedDydxToken: new WrappedEthereumDydxToken__factory(deployer).attach(deployedAddresses.wrappedEthereumDydxToken),
+    governanceStrategyV2: new GovernanceStrategyV2__factory(deployer).attach(deployedAddresses.strategyV2),
+    rewardsTreasuryBridge: new TreasuryBridge__factory(deployer).attach(deployedAddresses.rewardsTreasuryBridge),
+    communityTreasuryBridge: new TreasuryBridge__factory(deployer).attach(deployedAddresses.communityTreasuryBridge),
   };
 }

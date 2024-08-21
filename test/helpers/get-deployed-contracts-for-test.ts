@@ -12,6 +12,12 @@ import {
   executeUpdateMerkleDistributorRewardsParametersProposalForTest,
   executeWindDownSafetyModuleProposalForTest,
   executeOpsTrustProposalForTest,
+  executeUpdateMerkleDistributorRewardsParametersV2ProposalForTest,
+  executeV3DataAvailabilityProposalForTest,
+  executeOpsTrustV2ProposalForTest,
+  executeUpdateMerkleDistributorRewardsParametersDIP24ProposalForTest,
+  executeUpgradeGovernanceStrategyV2ProposalForTest,
+  executeTreasuryBridgeProposalForTest,
 } from '../migrations/deploy-contracts-for-test';
 
 let globalDeployedContracts: AllDeployedContracts;
@@ -61,9 +67,17 @@ async function getDeployedContractsForTest(): Promise<AllDeployedContracts> {
     await executeWindDownBorrowingPoolProposalForTest(deployedContracts);
     await executeUpdateMerkleDistributorRewardsParametersProposalForTest(deployedContracts);
     await executeWindDownSafetyModuleProposalForTest(deployedContracts);
+    await executeOpsTrustProposalForTest(deployedContracts);
+    await executeUpdateMerkleDistributorRewardsParametersV2ProposalForTest(deployedContracts);
+    await executeV3DataAvailabilityProposalForTest(deployedContracts);
+    await executeOpsTrustV2ProposalForTest(deployedContracts);
+    await executeUpdateMerkleDistributorRewardsParametersDIP24ProposalForTest(deployedContracts);
+    await executeUpgradeGovernanceStrategyV2ProposalForTest(deployedContracts);
   }
-  await executeOpsTrustProposalForTest(deployedContracts);
+
   // Execute the proposals which have not yet been executed on mainnet.
+  await executeTreasuryBridgeProposalForTest(deployedContracts);
+  
   await configureForTest(deployedContracts);
   return deployedContracts;
 }
